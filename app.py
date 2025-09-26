@@ -10,6 +10,11 @@ from qdrant_client.models import PointStruct, Distance, VectorParams
 
 env = dotenv_values(".env")
 
+if 'QDRANT_URL' in st.secrets:
+    env['QDRANT_URL'] = st.secrets['QDRANT_URL']
+if 'QDRANT_API_KEY' in st.secrets:
+    env['QDRANT_API_KEY'] = st.secrets['QDRANT_API_KEY']
+
 EMBEDDING_MODEL = "text-embedding-3-large"
 
 EMBEDDING_DIM = 3072
@@ -39,12 +44,9 @@ def transcribe_audio(audio_bytes):
 @st.cache_resource
 def get_qdrant_client():    
     return QdrantClient(
-    url= env["QDRANT_URL"]
-,
+    url= env["QDRANT_URL"],
     api_key= env["QDRANT_API_KEY"],
-    #url="https://3e1c2f9a-b3a3-4c02-bfed-6bbd08856216.eu-central-1-0.aws.cloud.qdrant.io:6333",
-    #api_key="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiJtIn0.mYTGxD23q7Y14-LsNKSYlrxYjqSuTfZRTriLYHOdUlU",
-)
+  )
 
 
 def assure_db_collection_exists():
